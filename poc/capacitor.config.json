@@ -1,0 +1,10 @@
+{
+  "appId": "net.buser.capwaspoc",
+  "appName": "capacitor-wasm-poc",
+  "webDir": "dist",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  }
+}
