@@ -3,57 +3,25 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>Awesome Capacitor App</title>
+  <title>Capacitor WASM PoC</title>
   <meta name="viewport"
     content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="format-detection" content="telephone=no" />
   <meta name="msapplication-tap-highlight" content="no" />
-
-  <script type="module"
-    src="https://unpkg.com/@ionic/pwa-elements@latest/dist/ionicpwaelements/ionicpwaelements.esm.js"></script>
-  <script nomodule
-    src="https://unpkg.com/@ionic/pwa-elements@latest/dist/ionicpwaelements/ionicpwaelements.js"></script>
   <link rel="icon" type="image/x-icon" href="./assets/icon/favicon.ico" />
   <link rel="manifest" href="./manifest.json" />
-  <link rel="stylesheet" href="./css/style.css" />
-  <meta name="theme-color" content="#31d53d" />
+  <link rel="stylesheet" href="/node_modules/@picocss/pico/css/pico.min.css">
 </head>
-
 <body>
   <script src="./wasm_exec.js"></script>
-  <script>
-    if (!WebAssembly.instantiateStreaming) {
-      // polyfill
-      WebAssembly.instantiateStreaming = async (resp, importObject) => {
-        const source = await (await resp).arrayBuffer();
-        return await WebAssembly.instantiate(source, importObject);
-      };
-    }
-
-    const go = new Go();
-
-    let mod, inst;
-
-    WebAssembly.instantiateStreaming(fetch("./lib.wasm"), go.importObject).then(
-      result => {
-        mod = result.module;
-        inst = result.instance;
-        document.getElementById("runButton").disabled = false;
-      }
-    );
-
-    async function run() {
-      await go.run(inst);
-      inst = await WebAssembly.instantiate(mod, go.importObject); // reset instance
-    }
-  </script>
-
-  <capacitor-welcome></capacitor-welcome>
-
-  <script src="./js/capacitor-welcome.js" type="module"></script>
-
-  <button onClick="run();" id="runButton" disabled>Run</button>
-
+  <h1>WebAssembly Example</h1>
+    <button onclick="generateHTML()">Generate HTML</button>
+    <script>
+        const go = new Go();
+        WebAssembly.instantiateStreaming(fetch("lib.wasm"), go.importObject).then((result) => {
+            go.run(result.instance);
+        });
+    </script>
 </body>
 
 </html>
