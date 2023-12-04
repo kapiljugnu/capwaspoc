@@ -2,27 +2,20 @@ package main
 
 import (
 	"syscall/js"
+
+	"github.com/a-h/templ"
 )
 
 func main() {
-	// Register a JavaScript function that we can call from the web page
-	js.Global().Set("generateHTML", js.FuncOf(generateHTML))
+	c := make(chan struct{}, 0)
 
-	// Keep the program running to handle JavaScript callbacks
-	select {}
-}
+	// Define a simple component
+	helloWorld := templ.ComponentFunc(func() templ.Node {
+		return templ.Element("h1", nil, templ.Text("Hello, World!"))
+	})
 
-func generateHTML(this js.Value, p []js.Value) interface{} {
-	// Get the document object from the web page
-	document := js.Global().Get("document")
+	// Render the component
+	js.Global().Get("document").Call("getElementById", "app").Set("innerHTML", templ.RenderToString(helloWorld()))
 
-	// Create a new <p> element
-	paragraph := document.Call("createElement", "p")
-	paragraph.Set("textContent", "Hello, WebAssembly!")
-
-	// Append the <p> element to the body of the document
-	body := document.Get("body")
-	body.Call("appendChild", paragraph)
-
-	return nil
+	<-c
 }

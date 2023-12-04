@@ -12,16 +12,15 @@
   <link rel="manifest" href="./manifest.json" />
   <link rel="stylesheet" href="/node_modules/@picocss/pico/css/pico.min.css">
 </head>
+
 <body>
   <script src="./wasm_exec.js"></script>
-  <h1>WebAssembly Example</h1>
-    <button onclick="generateHTML()">Generate HTML</button>
-    <script>
-        const go = new Go();
-        WebAssembly.instantiateStreaming(fetch("lib.wasm"), go.importObject).then((result) => {
-            go.run(result.instance);
-        });
-    </script>
+  <script>
+    const go = new Go();
+    WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then((result) => {
+      go.run(result.instance);
+    });
+  </script>
 </body>
 
 </html>
