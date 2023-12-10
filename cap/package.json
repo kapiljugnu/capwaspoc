@@ -16,7 +16,8 @@
     "@capacitor/camera": "latest",
     "@capacitor/core": "latest",
     "@capacitor/ios": "^5.5.1",
-    "@capacitor/splash-screen": "latest"
+    "@capacitor/splash-screen": "latest",
+    "@picocss/pico": "^1.5.10"
   },
   "devDependencies": {
     "@capacitor/cli": "latest",

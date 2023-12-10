@@ -1,21 +1,27 @@
 package main
 
 import (
+	"context"
+	"strings"
 	"syscall/js"
 
-	"github.com/a-h/templ"
+	templates "boozedog/capwaspoc/templ"
 )
 
+// "context"
+// "os"
+
 func main() {
+
 	c := make(chan struct{}, 0)
+	b := new(strings.Builder)
 
 	// Define a simple component
-	helloWorld := templ.ComponentFunc(func() templ.Node {
-		return templ.Element("h1", nil, templ.Text("Hello, World!"))
-	})
+	helloWorld := templates.Hello("abc")
+	helloWorld.Render(context.Background(), b)
 
 	// Render the component
-	js.Global().Get("document").Call("getElementById", "app").Set("innerHTML", templ.RenderToString(helloWorld()))
+	js.Global().Get("document").Call("getElementById", "app").Set("innerHTML", b.String())
 
 	<-c
 }
