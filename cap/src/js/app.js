@@ -1,5 +1,5 @@
 import './ionic';
-import '@picocss/pico/css/pico.min.css'
+// import '@picocss/pico/css/pico.min.css'
 
 import iconHome from '@ionic/core/dist/ionic/svg/home.svg';
 import iconMenu from '@ionic/core/dist/ionic/svg/menu.svg';

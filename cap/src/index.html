@@ -11,16 +11,26 @@
   <link rel="icon" type="image/x-icon" href="./assets/icon/favicon.ico" />
   <link rel="manifest" href="./manifest.json" />
   <script type="module" src="./js/app.js"></script>
+  <script src="wasm_exec.js"></script>
+  <script>
+    const go = new Go();
+    WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then((result) => {
+      go.run(result.instance);
+      go_handler('home')
+    });
+  </script>
   <script>
     function go_handler(path) {
       if (go_wasm_handler) {
         document.querySelector('#app-content').innerHTML = go_wasm_handler(path)
+      } else {
+        console.log('not ready.')
       }
     }
   </script>
 </head>
 
-<body onload="go_handler('home')">
+<body>
   <ion-split-pane when="lg" content-id="main">
     <ion-menu content-id="main">
       <ion-header>
@@ -54,14 +64,6 @@
       </ion-content>
     </div>
   </ion-split-pane>
-
-  <script src="./wasm_exec.js"></script>
-  <script>
-    const go = new Go();
-    WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then((result) => {
-      go.run(result.instance);
-    });
-  </script>
 </body>
 
 </html>
