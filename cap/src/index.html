@@ -17,14 +17,39 @@
     WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then((result) => {
       go.run(result.instance);
       go_handler('home')
+      sidemenu()
     });
   </script>
   <script>
+    function makeScriptsExecutable(el) {
+      el.querySelectorAll("script").forEach(script => {
+        const clone = document.createElement("script")
+
+        for (const attr of script.attributes) {
+          clone.setAttribute(attr.name, attr.value)
+        }
+
+        clone.text = script.innerHTML
+        script.remove()
+        document.head.appendChild(clone)
+      })
+    }
+
     function go_handler(path) {
       if (go_wasm_handler) {
         document.querySelector('#app-content').innerHTML = go_wasm_handler(path)
       } else {
         console.log('not ready.')
+      }
+    }
+
+    function sidemenu() {
+      if (go_wasm_handler) {
+        const div = document.querySelector('div.drawer')
+        const temp = document.createElement('div');
+        temp.innerHTML = go_wasm_handler('sidemenu');
+        makeScriptsExecutable(temp)
+        div.append(temp.firstChild)
       }
     }
   </script>
@@ -61,14 +86,7 @@
           </main>
         </section>
       </div>
-      <div class="drawer-side py-safe">
-        <label for="my-drawer-3" aria-label="close sidebar" class="drawer-overlay"></label>
-        <ul class="menu p-4 w-80 min-h-full">
-          <!-- Sidebar content here -->
-          <li><a onclick="go_handler('home'); return false;">Home</a></li>
-          <li><a onclick="go_handler('about'); return false;">About</a></li>
-        </ul>
-      </div>
+
     </div>
 
     <footer class="footer items-center p-4 shrink-0">
