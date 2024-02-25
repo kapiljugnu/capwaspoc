@@ -7,5 +7,3 @@ node_modules/
 dist/
 .devenv
 .direnv
-android
-ios
