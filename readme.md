@@ -2,16 +2,19 @@
 
 ## building and testing
 
+### go stuff
+
 ```sh
 # compile go wasm stuff
 cd go
 GOARCH=wasm GOOS=js go build -o main.wasm main.go
 cp "$(go env GOROOT)/misc/wasm/wasm_exec.js" ../cap/src/public/
 cp main.wasm ../cap/src/public/
+```
 
-# capacitor stuff
-cd ../cap
+### capacitor stuff
 
+```sh
 # update npm packages
 ncu -u
 rm package-lock.json node_modules
@@ -25,9 +28,16 @@ npm start
 npm run build
 
 # run in iOS simulator
-npx cap sync
+npx cap add ios
 npx cap run ios
 ```
+
+## deploy to ionic applow
+
+```sh
+git push ionic
+```
+
 ## get iOS local sim working
 
 ```sh
@@ -41,4 +51,11 @@ sudo xcode-select -r
 
 ```sh
 nix flake init --template github:cachix/devenv#flake-parts
+```
+
+## ionic appflow stuff
+
+```sh
+ionic init
+ionic link 17c1cf69
 ```
