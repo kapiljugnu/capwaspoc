@@ -7,4 +7,5 @@ node_modules/
 dist/
 .devenv
 .direnv
-cap/ios
+android
+ios
