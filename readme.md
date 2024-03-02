@@ -49,8 +49,15 @@ sudo xcode-select -r
 
 ## devenv stuff
 
+Start the new project for using devenv
 ```sh
+
 nix flake init --template github:cachix/devenv#flake-parts
+```
+
+Run the devenv
+```sh
+nix develop --impure
 ```
 
 ## ionic appflow stuff

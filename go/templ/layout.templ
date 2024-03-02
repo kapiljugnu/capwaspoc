@@ -1,0 +1,65 @@
+package templates
+
+type Menu struct {
+  Title string
+  Icon string
+  Component templ.Component
+}
+
+var FUEL_LOAD = "fuel-load"
+var TAKEOFF_MIS = "takeoff-mins"
+var ALTERNATE = "alternate"
+
+var AppMenus = map[string]Menu{
+        FUEL_LOAD: Menu{Title: "Fuel load", Icon: "", Component: FuelLoad()},
+		TAKEOFF_MIS: Menu{Title: "Takeoff mins", Icon: "", Component: Takeoffmins()},
+        ALTERNATE:Menu{Title: "Alternate", Icon: "", Component: Alternate()},
+		// Menu{Item: "Repair", Icon: "", Key: "repair"},
+		// Menu{Item: "Holding speed", Icon: "", Key: "holding-speed"},
+	}
+
+var menu_order = []string{FUEL_LOAD, TAKEOFF_MIS, ALTERNATE}
+
+
+
+script serverGoHandler(menu string) {
+  console.log(menu)
+  render_app(menu);
+  return false;
+}
+
+templ Layout(menu Menu){
+    <div class="py-safe h-screen flex flex-col">
+        <div class="drawer grow">
+            <input id="my-drawer-3" type="checkbox" class="drawer-toggle" />
+            <div class="drawer-content flex flex-col">
+                <!-- Navbar -->
+                <div class="w-full navbar">
+                <div class="flex-none">
+                    <label for="my-drawer-3" aria-label="open sidebar" class="btn btn-square btn-ghost">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        class="inline-block w-6 h-6 stroke-current">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
+                        </path>
+                    </svg>
+                    </label>
+                </div>
+                <div class="flex-1 px-2 mx-2">{menu.Title}</div>
+                </div>
+                <section class="p-8 grow shrink-0 basis-auto">
+                    <main class="min-h-[90%]" id="app-content">
+                    @menu.Component
+                    </main>
+                </section>
+            </div>
+            <div class="drawer-side py-safe">
+                <label for="my-drawer-3" aria-label="close sidebar" class="drawer-overlay"></label>
+                <ul class="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
+                    for _, key := range menu_order {
+                        <li><a role="button" onclick={serverGoHandler(key)}>{AppMenus[key].Title}</a></li>
+                    }
+                </ul>
+            </div>
+        </div>
+  </div>
+}
