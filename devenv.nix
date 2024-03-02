@@ -5,7 +5,7 @@
 
   packages = [
     pkgs.cocoapods
-    pkgs.npm-check-updates 
+    pkgs.npm-check-updates
   ];
 
   languages.go.enable = true;
@@ -16,5 +16,5 @@
     echo "node version:"
     node --version
     go version
-  ''; 
+  '';
 }

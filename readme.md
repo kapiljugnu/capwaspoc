@@ -8,8 +8,8 @@
 # compile go wasm stuff
 cd go
 GOARCH=wasm GOOS=js go build -o main.wasm main.go
-cp "$(go env GOROOT)/misc/wasm/wasm_exec.js" ../cap/src/public/
-cp main.wasm ../cap/src/public/
+cp "$(go env GOROOT)/misc/wasm/wasm_exec.js" ../src/public/
+cp main.wasm ../src/public/
 ```
 
 ### capacitor stuff
@@ -35,6 +35,7 @@ npx cap run ios
 ## deploy to ionic applow
 
 ```sh
+npx cap add android
 git push ionic
 ```
 
