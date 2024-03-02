@@ -5,7 +5,25 @@ import (
 	"context"
 	"strings"
 	"syscall/js"
+
+	"github.com/a-h/templ"
 )
+
+var FUEL_LOAD = ""
+var TAKEOFF_MIS = "takeoff-mins"
+var ALTERNATE = "alternate"
+
+type Menu struct {
+	Component templ.Component
+}
+
+var AppMenus = map[string]templ.Component{
+	"fuel-load":    templates.FuelLoad(),
+	"takeoff-mins": templates.Takeoffmins(),
+	"alternate":    templates.Alternate(),
+	// Menu{Item: "Repair", Key: "repair"},
+	// Menu{Item: "Holding speed", Key: "holding-speed"},
+}
 
 func main() {
 
@@ -15,8 +33,7 @@ func main() {
 		path := args[0].String()
 		path = strings.ToLower(path)
 
-		menu := templates.AppMenus[path]
-		component := templates.Layout(menu)
+		component := AppMenus[path]
 
 		b := new(strings.Builder)
 		component.Render(context.Background(), b)
