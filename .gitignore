@@ -1,6 +1,8 @@
 .idea/
 node_modules/
-.vscode/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
 *.map
 .DS_Store
 .sourcemaps
