@@ -16,8 +16,15 @@
     const go = new Go();
     WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then((result) => {
       go.run(result.instance);
-      go_handler('home')
-      sidemenu()
+      const side_menu_content = go_wasm_handler?.("sidemenu")
+      const home_content = go_wasm_handler?.("home")
+      if (side_menu_content) {
+        render_content("div.drawer", side_menu_content, false)
+      }
+      if (home_content) {
+        render_content("#app-content", home_content)
+      }
+      
     });
   </script>
   <script>
@@ -35,22 +42,15 @@
       })
     }
 
-    function go_handler(path) {
-      if (go_wasm_handler) {
-        document.querySelector('#app-content').innerHTML = go_wasm_handler(path)
-      } else {
-        console.log('not ready.')
+    function render_content(el, html, clean = true) {
+      const div = document.querySelector(el)
+      const temp = document.createElement('div');
+      temp.innerHTML = html;
+      makeScriptsExecutable(temp)
+      if (clean) {
+        div.innerHTML = "";
       }
-    }
-
-    function sidemenu() {
-      if (go_wasm_handler) {
-        const div = document.querySelector('div.drawer')
-        const temp = document.createElement('div');
-        temp.innerHTML = go_wasm_handler('sidemenu');
-        makeScriptsExecutable(temp)
-        div.append(temp.firstChild)
-      }
+      div.append(temp.firstChild)
     }
   </script>
 </head>
@@ -62,7 +62,7 @@
       <div class="drawer-content flex flex-col">
         <!-- Navbar -->
         <div class="w-full navbar">
-          <div class="flex-none lg:hidden">
+          <div class="flex-none">
             <label for="my-drawer-3" aria-label="open sidebar" class="btn btn-square btn-ghost">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                 class="inline-block w-6 h-6 stroke-current">
@@ -72,13 +72,6 @@
             </label>
           </div>
           <div class="flex-1 px-2 mx-2">Navbar Title</div>
-          <div class="flex-none hidden lg:block">
-            <ul class="menu menu-horizontal">
-              <!-- Navbar menu content here -->
-              <li><a onclick="go_handler('home'); return false;">Home</a></li>
-              <li><a onclick="go_handler('about'); return false;">About</a></li>
-            </ul>
-          </div>
         </div>
         <section class="p-8 grow shrink-0 basis-auto">
           <main class="min-h-[90%]" id="app-content">

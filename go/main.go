@@ -32,6 +32,7 @@ func insert_menus(db *memdb.MemDB) {
 	menus := []*templates.Menu{
 		&templates.Menu{Item: "About"},
 		&templates.Menu{Item: "Home"},
+		&templates.Menu{Item: "Welcome Page"},
 	}
 	for _, m := range menus {
 		if err := txn.Insert("menu", m); err != nil {
@@ -91,6 +92,21 @@ func main() {
 			component = templates.Hello("Home")
 		case "about":
 			component = templates.Hello("About")
+		case "welcome page":
+			var existing_name js.Value
+			existing_name = js.Global().Get("localStorage").Call("getItem", "name")
+			if existing_name.IsNull() {
+				component = templates.NameForm()
+			} else {
+				component = templates.Welcome(existing_name.String())
+			}
+		case "save-name-form":
+			name := args[1].String()
+			js.Global().Get("localStorage").Call("setItem", "name", name)
+			component = templates.Welcome(name)
+		case "remove-name":
+			js.Global().Get("localStorage").Call("removeItem", "name")
+			component = templates.NameForm()
 		}
 
 		b := new(strings.Builder)

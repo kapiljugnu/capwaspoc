@@ -1,0 +1,16 @@
+package templates
+
+
+script serverSaveForm() {
+    const name = document.querySelector('#name').value;
+    const welcome_page_content = go_wasm_handler("save-name-form", name)
+    render_content("#app-content", welcome_page_content)
+    return false;
+}
+
+templ NameForm() {
+    <div>
+        <input type="text" placeholder="Type here" id="name" class="input input-bordered w-full max-w-xs" />
+        <button class="btn" onclick={serverSaveForm()}>Submit</button>
+    </div>
+}
