@@ -8,6 +8,7 @@ import (
 
 	"github.com/a-h/templ"
 	"github.com/hashicorp/go-memdb"
+	supa "github.com/nedpals/supabase-go"
 )
 
 var schema = &memdb.DBSchema{
@@ -33,6 +34,7 @@ func insert_menus(db *memdb.MemDB) {
 		&templates.Menu{Item: "About"},
 		&templates.Menu{Item: "Home"},
 		&templates.Menu{Item: "Welcome Page"},
+		&templates.Menu{Item: "Login"},
 	}
 	for _, m := range menus {
 		if err := txn.Insert("menu", m); err != nil {
@@ -61,6 +63,18 @@ func read_menus(db *memdb.MemDB) []templates.Menu {
 
 	return menus
 
+}
+
+func login() (*supa.AuthenticatedDetails, error) {
+	supabaseUrl := "https://ufqekjzxanxjlglrysbw.supabase.co/"
+	supabaseKey := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmcWVranp4YW54amxnbHJ5c2J3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDkwMzg3ODIsImV4cCI6MjAyNDYxNDc4Mn0.mHDWDGat47YLzV1Bx5ob4fs2YWPuIY8Afqhs5BEm7X8"
+	supabase := supa.CreateClient(supabaseUrl, supabaseKey)
+
+	ctx := context.Background()
+	return supabase.Auth.SignIn(ctx, supa.UserCredentials{
+		Email:    "sup@booze.dog",
+		Password: "sup",
+	})
 }
 
 func main() {
@@ -107,6 +121,16 @@ func main() {
 		case "remove-name":
 			js.Global().Get("localStorage").Call("removeItem", "name")
 			component = templates.NameForm()
+		case "login":
+			component = templates.Login()
+		case "login-progress":
+			component = templates.LoginProgress()
+		case "login-init":
+			auth, err := login()
+			if err != nil {
+				component = templates.LoginFail()
+			}
+			component = templates.LoginDetails(auth.User.Email)
 		}
 
 		b := new(strings.Builder)
