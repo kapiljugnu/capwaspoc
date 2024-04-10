@@ -1,10 +1,8 @@
 package templates
 
-
 script serverSaveForm() {
     const name = document.querySelector('#name').value;
-    const welcome_page_content = go_wasm_handler("save-name-form", name)
-    render_content("#app-content", welcome_page_content)
+    render_app("save-name-form", name)
     return false;
 }
 

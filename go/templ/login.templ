@@ -1,20 +1,8 @@
 package templates
 
 
-script serverLogin() {
-    const login_progress = go_wasm_handler("login-progress")
-    render_content("#app-content", login_progress)
-    new Promise((res, rej) => {
-        const login_init = go_wasm_handler("login-init")
-        res(login_init)
-    }).then((html)=>{
-        render_content("#app-content", html)
-    })
-    return false;
-}
-
 templ Login() {
-    <button class="btn" onclick={serverLogin()}>Login</button>
+    <button class="btn" onclick="render_app('login-progress'); render_app('login-init');">Login</button>
 }
 
 templ LoginProgress() {

@@ -12,14 +12,13 @@ import "bytes"
 
 func serverSaveForm() templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_serverSaveForm_a29b`,
-		Function: `function __templ_serverSaveForm_a29b(){const name = document.querySelector('#name').value;
-    const welcome_page_content = go_wasm_handler("save-name-form", name)
-    render_content("#app-content", welcome_page_content)
+		Name: `__templ_serverSaveForm_9fca`,
+		Function: `function __templ_serverSaveForm_9fca(){const name = document.querySelector('#name').value;
+    render_app("save-name-form", name)
     return false;
 }`,
-		Call:       templ.SafeScript(`__templ_serverSaveForm_a29b`),
-		CallInline: templ.SafeScriptInline(`__templ_serverSaveForm_a29b`),
+		Call:       templ.SafeScript(`__templ_serverSaveForm_9fca`),
+		CallInline: templ.SafeScriptInline(`__templ_serverSaveForm_9fca`),
 	}
 }
 

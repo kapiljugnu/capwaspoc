@@ -6,8 +6,7 @@ type Menu struct {
 }
 
 script serverGoHandler(menu string) {
-  const menu_content = go_wasm_handler(menu)
-  render_content("#app-content", menu_content)
+  render_app(menu)
   return false;
 }
 

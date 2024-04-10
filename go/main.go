@@ -65,30 +65,29 @@ func read_menus(db *memdb.MemDB) []templates.Menu {
 
 }
 
-func login() (*supa.AuthenticatedDetails, error) {
-	supabaseUrl := "https://ufqekjzxanxjlglrysbw.supabase.co/"
-	supabaseKey := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmcWVranp4YW54amxnbHJ5c2J3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDkwMzg3ODIsImV4cCI6MjAyNDYxNDc4Mn0.mHDWDGat47YLzV1Bx5ob4fs2YWPuIY8Afqhs5BEm7X8"
+func login(ctx context.Context) (*supa.AuthenticatedDetails, error) {
+	supabaseUrl := "url"
+	supabaseKey := "key"
 	supabase := supa.CreateClient(supabaseUrl, supabaseKey)
 
-	ctx := context.Background()
 	return supabase.Auth.SignIn(ctx, supa.UserCredentials{
-		Email:    "sup@booze.dog",
-		Password: "sup",
+		Email:    "email",
+		Password: "password",
 	})
 }
 
 func main() {
 
-	// connect db
-	db, err := memdb.NewMemDB(schema)
-	if err != nil {
-		panic(err)
-	}
+	// // connect db
+	// db, err := memdb.NewMemDB(schema)
+	// if err != nil {
+	// 	panic(err)
+	// }
 
-	// insert menu
-	insert_menus(db)
-	// read
-	menus := read_menus(db)
+	// // insert menu
+	// insert_menus(db)
+	// // read
+	// menus := read_menus(db)
 
 	// fmt.Println(menus)
 
@@ -100,37 +99,48 @@ func main() {
 		var component templ.Component
 
 		switch path {
-		case "sidemenu":
-			component = templates.SideMenuRender(menus)
 		case "home":
-			component = templates.Hello("Home")
+			home := templates.Hello("Home")
+			component = templates.Layout("Home", home)
 		case "about":
-			component = templates.Hello("About")
+			about := templates.Hello("About")
+			component = templates.Layout("About", about)
 		case "welcome page":
 			var existing_name js.Value
 			existing_name = js.Global().Get("localStorage").Call("getItem", "name")
+			var child templ.Component
 			if existing_name.IsNull() {
-				component = templates.NameForm()
+				child = templates.NameForm()
 			} else {
-				component = templates.Welcome(existing_name.String())
+				child = templates.Welcome(existing_name.String())
 			}
+			component = templates.Layout("Welcome pgae", child)
 		case "save-name-form":
 			name := args[1].String()
 			js.Global().Get("localStorage").Call("setItem", "name", name)
-			component = templates.Welcome(name)
+			welcome := templates.Welcome(name)
+			component = templates.Layout("Welcome Page", welcome)
 		case "remove-name":
 			js.Global().Get("localStorage").Call("removeItem", "name")
-			component = templates.NameForm()
+			name_form := templates.NameForm()
+			component = templates.Layout("Welcome Page", name_form)
 		case "login":
-			component = templates.Login()
+			login := templates.Login()
+			component = templates.Layout("Login", login)
 		case "login-progress":
-			component = templates.LoginProgress()
+			login_progress := templates.LoginProgress()
+			component = templates.Layout("Login", login_progress)
 		case "login-init":
-			auth, err := login()
+			var child templ.Component
+			ctx, cancel := context.WithCancel(context.Background())
+			auth, err := login(ctx)
 			if err != nil {
-				component = templates.LoginFail()
+				cancel()
+				child = templates.LoginFail()
+			} else {
+				child = templates.LoginDetails(auth.User.Email)
 			}
-			component = templates.LoginDetails(auth.User.Email)
+			component = templates.Layout("Login", child)
 		}
 
 		b := new(strings.Builder)

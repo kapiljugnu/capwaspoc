@@ -16,13 +16,12 @@ type Menu struct {
 
 func serverGoHandler(menu string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_serverGoHandler_ccb1`,
-		Function: `function __templ_serverGoHandler_ccb1(menu){const menu_content = go_wasm_handler(menu)
-  render_content("#app-content", menu_content)
+		Name: `__templ_serverGoHandler_8c4b`,
+		Function: `function __templ_serverGoHandler_8c4b(menu){render_app(menu)
   return false;
 }`,
-		Call:       templ.SafeScript(`__templ_serverGoHandler_ccb1`, menu),
-		CallInline: templ.SafeScriptInline(`__templ_serverGoHandler_ccb1`, menu),
+		Call:       templ.SafeScript(`__templ_serverGoHandler_8c4b`, menu),
+		CallInline: templ.SafeScriptInline(`__templ_serverGoHandler_8c4b`, menu),
 	}
 }
 
@@ -68,7 +67,7 @@ func SideMenuRender(menu []Menu) templ.Component {
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(value.Item)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templ/menu.templ`, Line: 18, Col: 80}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templ/menu.templ`, Line: 17, Col: 80}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {

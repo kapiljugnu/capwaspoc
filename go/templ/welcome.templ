@@ -1,14 +1,9 @@
 package templates
 
 
-script removeName(){
-    const form_content = go_wasm_handler("remove-name")
-    render_content("#app-content", form_content)
-}
-
 templ Welcome(name string) {
     <div>
         <p>Welcome {name}</p>
-        <button class="btn" onclick={removeName()}>Clear</button>
+        <button class="btn" onclick="render_app('remove-name')">Clear</button>
     </div>
 }
