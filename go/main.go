@@ -3,6 +3,7 @@ package main
 import (
 	templates "boozedog/capwaspoc/templ"
 	"context"
+	"encoding/json"
 	"strings"
 	"syscall/js"
 
@@ -30,8 +31,9 @@ func insert_menus(db *memdb.MemDB) {
 
 	// Insert some people
 	menus := []*templates.Menu{
-		&templates.Menu{Item: "About"},
-		&templates.Menu{Item: "Home"},
+		{Item: "About"},
+		{Item: "Home"},
+		{Item: "Login"},
 	}
 	for _, m := range menus {
 		if err := txn.Insert("menu", m); err != nil {
@@ -64,16 +66,16 @@ func read_menus(db *memdb.MemDB) []templates.Menu {
 
 func main() {
 
-	// connect db
-	db, err := memdb.NewMemDB(schema)
-	if err != nil {
-		panic(err)
-	}
+	// // connect db
+	// db, err := memdb.NewMemDB(schema)
+	// if err != nil {
+	// 	panic(err)
+	// }
 
-	// insert menu
-	insert_menus(db)
-	// read
-	menus := read_menus(db)
+	// // insert menu
+	// insert_menus(db)
+	// // read
+	// menus := read_menus(db)
 
 	// fmt.Println(menus)
 
@@ -85,12 +87,27 @@ func main() {
 		var component templ.Component
 
 		switch path {
-		case "sidemenu":
-			component = templates.SideMenuRender(menus)
 		case "home":
-			component = templates.Hello("Home")
+			home := templates.Hello("Home")
+			component = templates.Layout("Home", home)
 		case "about":
-			component = templates.Hello("About")
+			about := templates.Hello("About")
+			component = templates.Layout("About", about)
+		case "login":
+			login := templates.Login()
+			component = templates.Layout("Login", login)
+		case "loggedin":
+			data := []byte(args[1].String())
+			var user templates.User
+			err := json.Unmarshal(data, &user)
+			if err != nil {
+				component = templates.Layout("Error", templates.SomethingWrong())
+			}
+			loggedin := templates.LoggedIn(user)
+			component = templates.Layout("Logged In", loggedin)
+		case "loginfail":
+			loginfail := templates.LoginFail()
+			component = templates.Layout("Login Fail", loginfail)
 		}
 
 		b := new(strings.Builder)
