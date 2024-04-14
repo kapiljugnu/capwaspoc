@@ -3,8 +3,10 @@ package main
 import (
 	templates "boozedog/capwaspoc/templ"
 	"context"
+	"fmt"
 	"strings"
 	"syscall/js"
+	"time"
 
 	"github.com/a-h/templ"
 	"github.com/hashicorp/go-memdb"
@@ -65,14 +67,18 @@ func read_menus(db *memdb.MemDB) []templates.Menu {
 
 }
 
-func login(ctx context.Context) (*supa.AuthenticatedDetails, error) {
-	supabaseUrl := "url"
-	supabaseKey := "key"
+func login() (*supa.AuthenticatedDetails, error) {
+	d := time.Now().Add(10 * time.Minute)
+	ctx, cancel := context.WithDeadline(context.Background(), d)
+	defer cancel()
+
+	supabaseUrl := "https://ufqekjzxanxjlglrysbw.supabase.co"
+	supabaseKey := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmcWVranp4YW54amxnbHJ5c2J3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDkwMzg3ODIsImV4cCI6MjAyNDYxNDc4Mn0.mHDWDGat47YLzV1Bx5ob4fs2YWPuIY8Afqhs5BEm7X8"
 	supabase := supa.CreateClient(supabaseUrl, supabaseKey)
 
 	return supabase.Auth.SignIn(ctx, supa.UserCredentials{
-		Email:    "email",
-		Password: "password",
+		Email:    "kr_kapil@hotmail.com",
+		Password: "kr_kapil",
 	})
 }
 
@@ -132,11 +138,10 @@ func main() {
 			component = templates.Layout("Login", login_progress)
 		case "login-init":
 			var child templ.Component
-			ctx, cancel := context.WithCancel(context.Background())
-			auth, err := login(ctx)
+			auth, err := login()
 			if err != nil {
-				cancel()
-				child = templates.LoginFail()
+				err_str := fmt.Sprint(err)
+				child = templates.LoginFail(err_str)
 			} else {
 				child = templates.LoginDetails(auth.User.Email)
 			}
