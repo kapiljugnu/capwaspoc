@@ -1,41 +1,22 @@
 package templates
 
-script supabaselogin() {
-	const { createClient } = supabase
-    const public_key = "key"
-    const supabase_client = createClient('url', public_key)
-
-	supabase_client.auth.signInWithPassword({
-        email: 'username',
-        password: 'password',
-	}).then(({data, error})=>{
-		 if (error == undefined) {
-			localStorage.user = JSON.stringify(data.user)
-			render_app('loggedin', JSON.stringify({"email":data.user.email}))
-		 } else {
-			render_app("loginfail")
-		 }
-		
-	})
+templ Login(_ JsonData) {
+	<div>
+		<input type="text" id="email" placeholder="email" required  class="input input-bordered input-md w-full max-w-xs" />
+		<input type="password" id="password" placeholder="password" required class="input input-bordered input-md w-full max-w-xs" />
+		<button class="btn" onclick="return supabase_login()">Login</button>
+	</div>
 }
 
-templ Login() {
-	<button class="btn" onclick={supabaselogin()}>Login</button>
-}
-
-type User struct {
-	Email string
-}
-
-templ LoggedIn(data User) {
+templ LoggedIn(data JsonData) {
 	<div role="alert" class="alert alert-success">
 		<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-		<span>{data.Email}</span>
+		<span>{data["email"].(string)}</span>
 	</div>
 }
 
 
-templ LoginFail() {
+templ LoginFail(_ JsonData) {
     <div role="alert" class="alert alert-error">
         <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
         <span>Login failed.</span>

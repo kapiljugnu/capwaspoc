@@ -1,5 +1,5 @@
 package templates
 
-templ Hello(name string) {
-	<div>Hello, { name }</div>
+templ Hello(data JsonData) {
+	<div>Hello, { data["name"].(string) }</div>
 }

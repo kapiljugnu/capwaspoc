@@ -13,12 +13,13 @@
   <script src="wasm_exec.js"></script>
   <link rel="stylesheet" href="./css/style.css" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./js/supabase_login.js"></script>
 
   <script>
     const go = new Go();
     WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then((result) => {
       go.run(result.instance);
-      render_app('login')
+      is_loggedin()
     });
   </script>
   <script>
@@ -37,7 +38,7 @@
     }
 
     function render_app(path, arg0) {
-      const temp_body = document.createElement('body');
+        const temp_body = document.createElement('body');
         temp_body.innerHTML = go_wasm_handler(path, arg0);
         makeScriptsExecutable(temp_body)
         document.documentElement.replaceChild(temp_body, document.body);

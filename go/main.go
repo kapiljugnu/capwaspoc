@@ -4,115 +4,68 @@ import (
 	templates "boozedog/capwaspoc/templ"
 	"context"
 	"encoding/json"
+	"fmt"
 	"strings"
 	"syscall/js"
 
 	"github.com/a-h/templ"
-	"github.com/hashicorp/go-memdb"
 )
 
-var schema = &memdb.DBSchema{
-	Tables: map[string]*memdb.TableSchema{
-		"menu": &memdb.TableSchema{
-			Name: "menu",
-			Indexes: map[string]*memdb.IndexSchema{
-				"id": &memdb.IndexSchema{
-					Name:    "id",
-					Unique:  true,
-					Indexer: &memdb.StringFieldIndex{Field: "Item"},
-				},
-			},
-		},
-	},
-}
-
-func insert_menus(db *memdb.MemDB) {
-	txn := db.Txn(true)
-
-	// Insert some people
-	menus := []*templates.Menu{
-		{Item: "About"},
-		{Item: "Home"},
-		{Item: "Login"},
-	}
-	for _, m := range menus {
-		if err := txn.Insert("menu", m); err != nil {
-			panic(err)
-		}
-	}
-
-	// Commit the transaction
-	txn.Commit()
-}
-
-func read_menus(db *memdb.MemDB) []templates.Menu {
-	txn := db.Txn(false)
-	defer txn.Abort()
-
-	it, err := txn.Get("menu", "id")
+func parseJson(arg string) (map[string]interface{}, error) {
+	data := []byte(arg)
+	var json_data interface{}
+	err := json.Unmarshal(data, &json_data)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
+	return json_data.(map[string]interface{}), nil
+}
 
-	menus := []templates.Menu{}
-	for obj := it.Next(); obj != nil; obj = it.Next() {
-		m := obj.(*templates.Menu)
-		menus = append(menus, *m)
-	}
+func ui_response(title string, child templ.Component) string {
+	b := new(strings.Builder)
+	component := templates.Layout(title, child)
+	component.Render(context.Background(), b)
+	return b.String()
+}
 
-	return menus
+type Route struct {
+	title     string
+	component func(templates.JsonData) templ.Component
+	data      templates.JsonData
+}
 
+var routes = map[string]Route{
+	"home":      {title: "Home", component: templates.Hello, data: templates.JsonData{"name": "Hello"}},
+	"about":     {title: "About", component: templates.Hello, data: templates.JsonData{"name": "About"}},
+	"login":     {title: "Login", component: templates.Login},
+	"loggedin":  {title: "Logged In", component: templates.LoggedIn},
+	"loginfail": {title: "Login Fail", component: templates.LoginFail},
 }
 
 func main() {
 
-	// // connect db
-	// db, err := memdb.NewMemDB(schema)
-	// if err != nil {
-	// 	panic(err)
-	// }
-
-	// // insert menu
-	// insert_menus(db)
-	// // read
-	// menus := read_menus(db)
-
-	// fmt.Println(menus)
-
 	c := make(chan struct{}, 0)
 
 	var cb = js.FuncOf(func(_ js.Value, args []js.Value) interface{} {
-		path := args[0].String()
-		path = strings.ToLower(path)
-		var component templ.Component
+		path := strings.ToLower(args[0].String())
+		json_data := args[1].String()
 
-		switch path {
-		case "home":
-			home := templates.Hello("Home")
-			component = templates.Layout("Home", home)
-		case "about":
-			about := templates.Hello("About")
-			component = templates.Layout("About", about)
-		case "login":
-			login := templates.Login()
-			component = templates.Layout("Login", login)
-		case "loggedin":
-			data := []byte(args[1].String())
-			var user templates.User
-			err := json.Unmarshal(data, &user)
-			if err != nil {
-				component = templates.Layout("Error", templates.SomethingWrong())
+		var data = make(templates.JsonData)
+		var err error
+		if json_data != "<undefined>" {
+			if data, err = parseJson(json_data); err != nil {
+				fmt.Println(err)
+				return ui_response("Error", templates.SomethingWrong(nil))
 			}
-			loggedin := templates.LoggedIn(user)
-			component = templates.Layout("Logged In", loggedin)
-		case "loginfail":
-			loginfail := templates.LoginFail()
-			component = templates.Layout("Login Fail", loginfail)
 		}
 
-		b := new(strings.Builder)
-		component.Render(context.Background(), b)
-		return b.String()
+		instance := routes[path]
+		if instance.data != nil {
+			for key, value := range instance.data {
+				data[key] = value
+			}
+		}
+		return ui_response(instance.title, instance.component(data))
 	})
 
 	js.Global().Set("go_wasm_handler", cb)

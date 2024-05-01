@@ -1,5 +1,6 @@
 package templates 
 
+type JsonData map[string]interface{}
 
 templ Layout(title string, c templ.Component){
     <div class="py-safe h-screen flex flex-col">
@@ -30,7 +31,7 @@ templ Layout(title string, c templ.Component){
                 <ul class="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
                     <li><a role="button" onclick="render_app('home')">Home</a></li>
                     <li><a role="button" onclick="render_app('about')">About</a></li>
-                    <li><a role="button" onclick="render_app('login')">Login</a></li>
+                    <li><a role="button" onclick="is_loggedin()">Login</a></li>
                 </ul>
             </div>
         </div>
