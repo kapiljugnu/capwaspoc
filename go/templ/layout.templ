@@ -2,7 +2,7 @@ package templates
 
 type JsonData map[string]interface{}
 
-templ Layout(title string, c templ.Component){
+templ Layout(title string, c templ.Component) {
     <div class="py-safe h-screen flex flex-col">
         <div class="drawer grow">
             <input id="my-drawer-3" type="checkbox" class="drawer-toggle" />
@@ -29,11 +29,11 @@ templ Layout(title string, c templ.Component){
             <div class="drawer-side py-safe">
                 <label for="my-drawer-3" aria-label="close sidebar" class="drawer-overlay"></label>
                 <ul class="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
-                    <li><a role="button" onclick="render_app('home')">Home</a></li>
-                    <li><a role="button" onclick="render_app('about')">About</a></li>
+                    <li><a role="button" onclick="render_test({'key':'home','name':'Home'})">Home</a></li>
+                    <li><a role="button" onclick="render_test({'key':'about','name':'About'})">About</a></li>
                     <li><a role="button" onclick="is_loggedin()">Login</a></li>
                 </ul>
             </div>
         </div>
-  </div>
+    </div>
 }

@@ -31,12 +31,11 @@ func ui_response(title string, child templ.Component) string {
 type Route struct {
 	title     string
 	component func(templates.JsonData) templ.Component
-	data      templates.JsonData
 }
 
 var routes = map[string]Route{
-	"home":      {title: "Home", component: templates.Hello, data: templates.JsonData{"name": "Hello"}},
-	"about":     {title: "About", component: templates.Hello, data: templates.JsonData{"name": "About"}},
+	"home":      {title: "Home", component: templates.Hello},
+	"about":     {title: "About", component: templates.Hello},
 	"login":     {title: "Login", component: templates.Login},
 	"loggedin":  {title: "Logged In", component: templates.LoggedIn},
 	"loginfail": {title: "Login Fail", component: templates.LoginFail},
@@ -49,6 +48,7 @@ func main() {
 	var cb = js.FuncOf(func(_ js.Value, args []js.Value) interface{} {
 		path := strings.ToLower(args[0].String())
 		json_data := args[1].String()
+		fmt.Println(json_data)
 
 		var data = make(templates.JsonData)
 		var err error
@@ -60,11 +60,6 @@ func main() {
 		}
 
 		instance := routes[path]
-		if instance.data != nil {
-			for key, value := range instance.data {
-				data[key] = value
-			}
-		}
 		return ui_response(instance.title, instance.component(data))
 	})
 

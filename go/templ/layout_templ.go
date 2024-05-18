@@ -32,7 +32,7 @@ func Layout(title string, c templ.Component) templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templ/layout.templ`, Line: 20, Col: 52}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `go/templ/layout.templ`, Line: 20, Col: 52}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -46,7 +46,7 @@ func Layout(title string, c templ.Component) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</main></section></div><div class=\"drawer-side py-safe\"><label for=\"my-drawer-3\" aria-label=\"close sidebar\" class=\"drawer-overlay\"></label><ul class=\"menu p-4 w-80 min-h-full bg-base-200 text-base-content\"><li><a role=\"button\" onclick=\"render_app(&#39;home&#39;)\">Home</a></li><li><a role=\"button\" onclick=\"render_app(&#39;about&#39;)\">About</a></li><li><a role=\"button\" onclick=\"is_loggedin()\">Login</a></li></ul></div></div></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</main></section></div><div class=\"drawer-side py-safe\"><label for=\"my-drawer-3\" aria-label=\"close sidebar\" class=\"drawer-overlay\"></label><ul class=\"menu p-4 w-80 min-h-full bg-base-200 text-base-content\"><li><a role=\"button\" onclick=\"render_test({&#39;key&#39;:&#39;home&#39;,&#39;name&#39;:&#39;Home&#39;})\">Home</a></li><li><a role=\"button\" onclick=\"render_test({&#39;key&#39;:&#39;about&#39;,&#39;name&#39;:&#39;About&#39;})\">About</a></li><li><a role=\"button\" onclick=\"is_loggedin()\">Login</a></li></ul></div></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

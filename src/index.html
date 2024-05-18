@@ -12,16 +12,29 @@
   <link rel="manifest" href="./manifest.json" />
   <script src="wasm_exec.js"></script>
   <link rel="stylesheet" href="./css/style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="./js/supabase_login.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> -->
+  <script type="module">
+    import { is_loggedin, supabase_logout, supabase_login, fetch_country, update_country, delete_country, create_country} from './js/supabase.js'
+    window.is_loggedin = is_loggedin;
+    window.supabase_login = supabase_login;
+    window.supabase_logout = supabase_logout;
+    window.db_op = {
+      fetch_country,
+      update_country,
+      delete_country,
+      create_country
+    }
 
-  <script>
     const go = new Go();
     WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then((result) => {
       go.run(result.instance);
       is_loggedin()
+      // delete_country()
+      // create_country()
+      // fetch_country()
     });
   </script>
+
   <script>
     function makeScriptsExecutable(el) {
       el.querySelectorAll("script").forEach(script => {
@@ -42,6 +55,11 @@
         temp_body.innerHTML = go_wasm_handler(path, arg0);
         makeScriptsExecutable(temp_body)
         document.documentElement.replaceChild(temp_body, document.body);
+    }
+
+    function render_test(args) {
+      const {key, ...rest} = args
+      render_app(key, JSON.stringify(rest))
     }
   </script>
 </head>
