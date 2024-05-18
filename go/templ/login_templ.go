@@ -54,13 +54,13 @@ func LoggedIn(data JsonData) templ.Component {
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(data["email"].(string))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `go/templ/login.templ`, Line: 14, Col: 32}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templ/login.templ`, Line: 14, Col: 32}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span> <button class=\"btn\" onclick=\"supabase_logout()\">Logout</button></div><button class=\"btn\" onclick=\"db_op.fetch_country()\">Fetch</button> <button class=\"btn\" onclick=\"db_op.create_country()\">Insert</button> <button class=\"btn\" onclick=\"db_op.update_country()\">Update</button> <button class=\"btn\" onclick=\"db_op.delete_country()\">Delete</button></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span> <button class=\"btn\" onclick=\"supabase_logout()\">Logout</button></div><button class=\"btn\" onclick=\"db_op.fetch_country()\">Fetch</button> <button class=\"btn\" onclick=\"db_op.create_country()\">Insert</button> <button class=\"btn\" onclick=\"db_op.update_country()\">Update</button> <button class=\"btn\" onclick=\"db_op.delete_country()\">Delete</button> <button class=\"btn\" onclick=\"insert_user_location()\">Insert User location</button></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

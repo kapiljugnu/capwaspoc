@@ -15,11 +15,12 @@ templ LoggedIn(data JsonData) {
 			<span>{data["email"].(string)}</span>
 			<button class="btn" onclick="supabase_logout()">Logout</button>
 		</div>
-
+		
 		<button class="btn" onclick="db_op.fetch_country()">Fetch</button>
 		<button class="btn" onclick="db_op.create_country()">Insert</button>
 		<button class="btn" onclick="db_op.update_country()">Update</button>
 		<button class="btn" onclick="db_op.delete_country()">Delete</button>
+		<button class="btn" onclick="insert_user_location()">Insert User location</button>
 	</div>
 }
 
