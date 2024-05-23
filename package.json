@@ -16,9 +16,11 @@
     "@capacitor/android": "^5.7.0",
     "@capacitor/camera": "latest",
     "@capacitor/core": "latest",
+    "@capacitor/geolocation": "^5.0.7",
     "@capacitor/ios": "^5.7.0",
     "@capacitor/splash-screen": "latest",
     "@ionic/core": "^7.7.3",
+    "@supabase/supabase-js": "^2.43.1",
     "tailwindcss-safe-area": "^0.5.1"
   },
   "devDependencies": {
