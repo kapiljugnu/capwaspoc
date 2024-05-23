@@ -3,10 +3,14 @@
 {
   env.GREET = "Welcome to capwaspoc";
 
-  packages = [
-    pkgs.cocoapods
-    pkgs.npm-check-updates
+  packages = with pkgs; [
+    cocoapods
+    fswatch
+    npm-check-updates
+    templ
   ];
+
+  dotenv.enable = true;
 
   languages.go.enable = true;
   languages.javascript.enable = true;

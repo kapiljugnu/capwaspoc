@@ -1,5 +1,12 @@
 # capacitor-wasm proof of concept
 
+## live reload of templ
+
+```sh
+cd src/go
+./watch.sh
+```
+
 ## building and testing
 
 ### go stuff
