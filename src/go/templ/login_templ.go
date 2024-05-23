@@ -23,7 +23,7 @@ func Login(_ JsonData) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div>Login here!1 <input type=\"text\" id=\"email\" placeholder=\"email\" required class=\"input input-bordered input-md w-full max-w-xs\"> <input type=\"password\" id=\"password\" placeholder=\"password\" required class=\"input input-bordered input-md w-full max-w-xs\"> <button class=\"btn\" onclick=\"return supabase_login()\">Login</button></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div><input type=\"text\" id=\"email\" placeholder=\"email\" required class=\"input input-bordered input-md w-full max-w-xs\"> <input type=\"password\" id=\"password\" placeholder=\"password\" required class=\"input input-bordered input-md w-full max-w-xs\"> <button class=\"btn\" onclick=\"return supabase_login()\">Login</button></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -54,7 +54,7 @@ func LoggedIn(data JsonData) templ.Component {
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(data["email"].(string))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templ/login.templ`, Line: 15, Col: 33}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templ/login.templ`, Line: 14, Col: 33}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
