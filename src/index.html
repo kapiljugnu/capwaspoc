@@ -12,43 +12,7 @@
   <link rel="manifest" href="./manifest.json" />
   <script src="wasm_exec.js"></script>
   <link rel="stylesheet" href="./css/style.css" />
-  <!-- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> -->
   <script type="module" src="./js/app.js"></script>
-  <script>
-    const go = new Go();
-    WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then((result) => {
-      go.run(result.instance);
-      is_loggedin()
-    });
-  </script>
-
-  <script>
-    function makeScriptsExecutable(el) {
-      el.querySelectorAll("script").forEach(script => {
-        const clone = document.createElement("script")
-
-        for (const attr of script.attributes) {
-          clone.setAttribute(attr.name, attr.value)
-        }
-
-        clone.text = script.innerHTML
-        script.remove()
-        document.head.appendChild(clone)
-      })
-    }
-
-    function render_app(path, arg0) {
-        const temp_body = document.createElement('body');
-        temp_body.innerHTML = go_wasm_handler(path, arg0);
-        makeScriptsExecutable(temp_body)
-        document.documentElement.replaceChild(temp_body, document.body);
-    }
-
-    function render_test(args) {
-      const {key, ...rest} = args
-      render_app(key, JSON.stringify(rest))
-    }
-  </script>
 </head>
 
 <body>
