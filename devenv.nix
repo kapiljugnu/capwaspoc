@@ -8,6 +8,7 @@
     fswatch
     npm-check-updates
     templ
+    reflex
   ];
 
   dotenv.enable = true;

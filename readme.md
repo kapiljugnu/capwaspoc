@@ -19,6 +19,12 @@ cp "$(go env GOROOT)/misc/wasm/wasm_exec.js" ../src/public/
 cp main.wasm ../src/public/
 ```
 
+### watch go stuff
+```sh
+cd src/go
+reflex -c reflex.conf
+```
+
 ### capacitor stuff
 
 ```sh
