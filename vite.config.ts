@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite';
+import path from 'path';
 
 export default defineConfig({
   root: './src',
@@ -7,4 +8,12 @@ export default defineConfig({
     minify: false,
     emptyOutDir: true,
   },
+  plugins: [{
+    name: 'watch-wasm',
+    handleHotUpdate({ file, server }) {
+      if (file.endsWith('.wasm')) {
+        server.ws.send({ type: "full-reload", path: '*' })
+      }
+    }
+  }],
 });
